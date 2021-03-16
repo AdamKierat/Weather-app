@@ -5,7 +5,7 @@ import { Platform, Text, View, StatusBar, StyleSheet, Button } from 'react-nativ
 
 const NormalView = () => {
     const styles = StyleSheet.create({
-        mainview: {
+        normalView: {
             flex: 1,
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
@@ -13,9 +13,9 @@ const NormalView = () => {
 
     return (
 
-        <View style={styles.mainview}>
+        <View style={styles.normalView}>
 
-            <Text>Welcome!</Text>
+            <Text>Welcome!@@@@@@@@@@@@@@@@</Text>
         </View>
     );
 

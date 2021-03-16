@@ -4,7 +4,7 @@ import { Platform, Text, View, StatusBar, StyleSheet, Button, TextInput } from '
 
 const OldView = () => {
     const styles = StyleSheet.create({
-        mainview: {
+        oldView: {
             flex: 1,
             paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         },
@@ -13,7 +13,7 @@ const OldView = () => {
     const [miasto, setMiasto] = React.useState('');
     return (
 
-        <View style={styles.mainview}>
+        <View style={styles.oldView}>
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 onChangeText={text => setMiasto(text)}
