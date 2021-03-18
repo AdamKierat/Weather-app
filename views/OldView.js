@@ -20,7 +20,9 @@ const OldView = () => {
                 miasto={miasto}
             />
 
-            <Text>{miasto}</Text>
+            <Text>{() => {
+                console.log(new Date(obj.dt * 1000 - (obj.timezone * 1000)))
+            }}</Text>
         </View>
     );
 

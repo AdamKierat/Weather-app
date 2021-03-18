@@ -12,51 +12,63 @@ const Tab = createMaterialBottomTabNavigator();
 
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [temperature, setTemperature] = useState(0)
-  const [sunset, setSunset] = useState(1551025128)
-  const [sunrise, setSunrise] = useState(1550986740)
-  const [pressure, setPressure] = useState(1004)
-  const [weatherCondition, setWeatherCondition] = useState(null)
+
+  //CORDS
+  const [currentlon, setCurrentlon] = useState()
+  const [currentlat, setCurrentlat] = useState()
+
+  //CITY PARMS
+  const [city, setCity] = useState("Gliwice")
+  const [country, setCountry] = useState()
+  const [temperature, setTemperature] = useState()
+  const [sunset, setSunset] = useState()
+  const [sunrise, setSunrise] = useState()
+  const [pressure, setPressure] = useState()
+  const [icon, setIcon] = useState()
+  const [iconLink, setIconLink] = useState("")
   const [error, setError] = useState(null)
   const [apiLoaded, setapiLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
-  function fetchWeather(lat = 55.4997, lon = -37.5597) {
+
+  function fetchWeather() {
     fetch(
-      `http://api.openweathermap.org/data/2.5/find?lat=55.5&lon=37.5&cnt=10&appid=a785b12636ed229463fa77e0a6deb5be`
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&units=metric&appid=${API_KEY}`
     )
       .then(res => res.json())
-      .then(data => console.log(data))
-      .then(json => {
-        setSunrise(json.sys.sunrise * 1000)
-        setSunset(json.sys.sunset * 1000)
-        setTemperature(json.weather[0].main.temp)
-        setPressure(json.weather[0].main.pressure)
-        setWeatherCondition(json.weather[0].description)
+      .then((json) => {
+
+        setCurrentlon(json.coord.lon)
+        setCurrentlat(json.coord.lat)
+
+        setCity(json.name)
+        setCountry(json.sys.country)
+        setTemperature(json.main.temp)
+        setSunrise(json.sys.sunrise)
+        setSunset(json.sys.sunset)
+
+        setPressure(json.main.pressure)
+        setIcon(json.weather.icon)
+
         setIsLoading(false)
       });
   }
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        fetchWeather(position.coords.latitude, position.coords.longitude);
-      },
-      error => setError('Error Getting Weather Condtions')
-    );
-  }, [])
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(
+  //     position => {
+  //       fetchWeather(position.coords.latitude, position.coords.longitude);
+  //     },
+  //     error => setError('Error Getting Weather Condtions')
+  //   );
+  // }, [])
   if (apiLoaded == false) {
     return (
       <AppLoading
         startAsync={fetchWeather}
         onFinish={() => {
           setapiLoaded(true)
-          console.log("Finish")
-          console.log("weatherCondition: ", weatherCondition)
-          console.log("sunrise: ", sunrise)
-          console.log("sunset: ", sunset)
-          console.log("temperature: ", temperature)
-          console.log("pressure: ", pressure)
+          console.log("Api loaded")
         }}
         onError={console.warn} />
     );
@@ -79,11 +91,16 @@ export default function App() {
             }}
           >
             {(props) => <NormalView {...props}
-              weatherCondition={weatherCondition}
-              sunrise={sunrise}
-              sunset={sunset}
+              currentlon={currentlon}
+              currentlat={currentlat}
+              city={city}
+              country={country}
               temperature={temperature}
+              sunset={sunset}
+              sunrise={sunrise}
               pressure={pressure}
+
+
 
             />}
 
