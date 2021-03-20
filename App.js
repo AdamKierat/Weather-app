@@ -31,41 +31,46 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
 
 
-  function fetchWeather() {
+  function fetchWeather(city) {
+    console.log(city)
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&units=metric&appid=${API_KEY}`
     )
       .then(res => res.json())
       .then((json) => {
-
-        setCurrentlon(json.coord.lon)
-        setCurrentlat(json.coord.lat)
-
+        console.log(json)
+        setIsLoading(false)
         setCity(json.name)
         setCountry(json.sys.country)
         setTemperature(json.main.temp)
         setSunrise(json.sys.sunrise)
         setSunset(json.sys.sunset)
-
         setPressure(json.main.pressure)
         setIcon(json.weather.icon)
-
-        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
   }
 
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(
-  //     position => {
-  //       fetchWeather(position.coords.latitude, position.coords.longitude);
-  //     },
-  //     error => setError('Error Getting Weather Condtions')
-  //   );
-  // }, [])
+  useEffect(() => {
+    //navigator.geolocation.getCurrentPosition(
+      //position => {
+        console.log("MIASTO: ", city)
+        fetchWeather(city);
+      // },
+      //error => setError('Error Getting Weather Condtions')
+    //);
+  }, [city])
+
+  let getCity = (city) => {
+    setCity(city)
+  }
+
   if (apiLoaded == false) {
     return (
       <AppLoading
-        startAsync={fetchWeather}
+        startAsync={fetchWeather(city)}
         onFinish={() => {
           setapiLoaded(true)
           console.log("Api loaded")
@@ -99,9 +104,7 @@ export default function App() {
               sunset={sunset}
               sunrise={sunrise}
               pressure={pressure}
-
-
-
+              fetchWeather={getCity}
             />}
 
           </Tab.Screen>
@@ -113,7 +116,7 @@ export default function App() {
                 <MaterialCommunityIcons name="account" color={color} size={26} />),
             }}
           >
-            {(props) => <OldView {...props} temp={temperature} />}
+            {(props) => <OldView {...props} />}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>

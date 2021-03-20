@@ -16,8 +16,7 @@ const OldView = () => {
         <View style={styles.oldView}>
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={text => setMiasto(text)}
-                miasto={miasto}
+                onSubmitEditing={text => setMiasto(text)}
             />
 
             <Text>{() => {
