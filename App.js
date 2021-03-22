@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import OldView from './views/OldView'
-import NormalView from './views/NormalView'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { API_KEY } from './utils/constants';
-import { createStackNavigator } from '@react-navigation/stack';
-import AppLoading from 'expo-app-loading';
+import React, { useState, useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import OldView from "./views/OldView";
+import NormalView from "./views/NormalView";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { API_KEY } from "./utils/constants";
+import AppLoading from "expo-app-loading";
 
 const Tab = createMaterialBottomTabNavigator();
 
-
 export default function App() {
-
   //CORDS
-  const [currentlon, setCurrentlon] = useState()
-  const [currentlat, setCurrentlat] = useState()
+  const [currentlon, setCurrentlon] = useState();
+  const [currentlat, setCurrentlat] = useState();
 
   //CITY PARMS
-  const [city, setCity] = useState("Gliwice")
-  const [country, setCountry] = useState()
-  const [temperature, setTemperature] = useState()
-  const [sunset, setSunset] = useState()
-  const [sunrise, setSunrise] = useState()
-  const [pressure, setPressure] = useState()
-  const [icon, setIcon] = useState()
-  const [iconLink, setIconLink] = useState("")
-  const [error, setError] = useState(null)
+  const [city, setCity] = useState("Gliwice");
+  const [temperature, setTemperature] = useState();
+  const [pressure, setPressure] = useState();
+  const [description, setDescription] = useState();
+  const [country, setCountry] = useState();
+  const [sunset, setSunset] = useState();
+  const [sunrise, setSunrise] = useState();
+  const [icon, setIcon] = useState();
+  const [iconLink, setIconLink] = useState("");
   const [apiLoaded, setapiLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true)
-
+  const [isLoading, setIsLoading] = useState(true);
 
   function fetchWeather(city) {
-    console.log(city)
+    console.log(city);
     fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=pl&units=metric&appid=${API_KEY}`
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
     )
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((json) => {
-        console.log(json)
-        setIsLoading(false)
-        setCity(json.name)
-        setCountry(json.sys.country)
-        setTemperature(json.main.temp)
-        setSunrise(json.sys.sunrise)
-        setSunset(json.sys.sunset)
-        setPressure(json.main.pressure)
-        setIcon(json.weather.icon)
+        console.log(json);
+        setIsLoading(false);
+        setCurrentlon(json.coord.lon);
+        setCurrentlat(json.coord.lat);
+        setCity(json.name);
+        setTemperature(json.main.temp);
+        setPressure(json.main.pressure);
+        setDescription(json.weather[0].description);
+        setCountry(json.sys.country);
+        setSunrise(json.sys.sunrise);
+        setSunset(json.sys.sunset);
+        setIcon(json.weather[0].icon);
+        setIconLink(`http://openweathermap.org/img/wn/${icon}@2x.png`);
       })
       .catch((error) => {
         console.log("error", error);
@@ -54,73 +54,98 @@ export default function App() {
   }
 
   useEffect(() => {
-    //navigator.geolocation.getCurrentPosition(
-      //position => {
-        console.log("MIASTO: ", city)
-        fetchWeather(city);
-      // },
-      //error => setError('Error Getting Weather Condtions')
-    //);
-  }, [city])
+    fetchWeather(city);
+  }, [city]);
 
-  let getCity = (city) => {
-    setCity(city)
-  }
+  let citySetter = (city) => {
+    setCity(city);
+  };
 
   if (apiLoaded == false) {
     return (
       <AppLoading
         startAsync={fetchWeather(city)}
         onFinish={() => {
-          setapiLoaded(true)
-          console.log("Api loaded")
+          setapiLoaded(true);
+          console.log("Api loaded");
         }}
-        onError={console.warn} />
+        onError={console.warn}
+      />
     );
   } else {
+    fetchWeather(city);
     return (
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
           activeColor="#f0edf6"
           inactiveColor="#3e2465"
-          barStyle={{ backgroundColor: 'grey' }}
+          barStyle={{ backgroundColor: "grey" }}
         >
-          <Tab.Screen name="NormalView"
-
+          <Tab.Screen
+            name="NormalView"
             options={{
-              tabBarLabel: 'YOUNG',
+              tabBarLabel: "YOUNG",
               tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name="account" color={color} size={26} />),
-
+                <MaterialCommunityIcons
+                  name="account"
+                  color={color}
+                  size={26}
+                />
+              ),
             }}
           >
-            {(props) => <NormalView {...props}
-              currentlon={currentlon}
-              currentlat={currentlat}
-              city={city}
-              country={country}
-              temperature={temperature}
-              sunset={sunset}
-              sunrise={sunrise}
-              pressure={pressure}
-              fetchWeather={getCity}
-            />}
-
+            {(props) => (
+              <NormalView
+                {...props}
+                currentlon={currentlon}
+                currentlat={currentlat}
+                city={city}
+                temperature={temperature}
+                pressure={pressure}
+                description={description}
+                icon={icon}
+                country={country}
+                sunset={sunset}
+                sunrise={sunrise}
+                iconLink={iconLink}
+                setCity={citySetter}
+              />
+            )}
           </Tab.Screen>
           <Tab.Screen
             name="OldView"
             options={{
-              tabBarLabel: 'OLD',
+              tabBarLabel: "OLD",
               tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name="account" color={color} size={26} />),
+                <MaterialCommunityIcons
+                  name="account"
+                  color={color}
+                  size={26}
+                />
+              ),
             }}
           >
-            {(props) => <OldView {...props} />}
+            {(props) => (
+              <OldView
+                {...props}
+                currentlon={currentlon}
+                currentlat={currentlat}
+                city={city}
+                temperature={temperature}
+                pressure={pressure}
+                description={description}
+                icon={icon}
+                country={country}
+                sunset={sunset}
+                sunrise={sunrise}
+                iconLink={iconLink}
+                setCity={citySetter}
+              />
+            )}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
-
     );
   }
-};
+}
