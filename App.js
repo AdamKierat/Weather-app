@@ -28,13 +28,11 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   function fetchWeather(city) {
-    console.log(city);
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
     )
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         setIsLoading(false);
         setCurrentlon(json.coord.lon);
         setCurrentlat(json.coord.lat);
