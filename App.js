@@ -23,9 +23,11 @@ export default function App() {
   const [sunset, setSunset] = useState();
   const [sunrise, setSunrise] = useState();
   const [icon, setIcon] = useState();
-  const [iconLink, setIconLink] = useState("");
+  const [iconLink, setIconLink] = useState("http://openweathermap.org/img/wn/10d@2x.png");
   const [apiLoaded, setapiLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [counter, setCounter] = useState(0)
 
   function fetchWeather(city) {
     fetch(
@@ -34,8 +36,8 @@ export default function App() {
       .then((res) => res.json())
       .then((json) => {
         setIsLoading(false);
-        setCurrentlon(json.coord.lon);
-        setCurrentlat(json.coord.lat);
+        // setCurrentlon(json.coord.lon);
+        //setCurrentlat(json.coord.lat);
         setCity(json.name);
         setTemperature(json.main.temp);
         setPressure(json.main.pressure);
@@ -45,6 +47,11 @@ export default function App() {
         setSunset(json.sys.sunset);
         setIcon(json.weather[0].icon);
         setIconLink(`http://openweathermap.org/img/wn/${icon}@2x.png`);
+
+
+        // setCounter(counter + 1)
+        // console.log("Api karola używane jest" + counter)
+
       })
       .catch((error) => {
         console.log("error", error);
