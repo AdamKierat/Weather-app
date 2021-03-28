@@ -8,10 +8,12 @@ import {
   TextInput,
   Image,
 } from "react-native";
+
 import { getTimeToDisplay, getCurrentDateTime } from "../utils/timeConverters";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Dimensions } from 'react-native';
-
+import Feather from "react-native-vector-icons/MaterialCommunityIcons";
 const NormalView = ({
   currentlon,
   currentlat,
@@ -25,64 +27,10 @@ const NormalView = ({
   sunrise,
   iconLink,
   setCity,
+  fetchWeather
 }) => {
   const [cityHelper, setCityHelper] = useState("");
   const [dateNow, setDateNow] = useState();
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-
-  const styles = StyleSheet.create({
-    container: {
-      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-      backgroundColor: "#2d9cdb",
-      flex: 1,
-
-    },
-    textInput: {
-      height: 50,
-      width: 320,
-      margin: 5,
-      borderColor: "#ffffff",
-      borderRadius: 20,
-      borderWidth: 3.5,
-      textAlign: "center",
-      fontSize: 30,
-      fontWeight: "bold",
-      color: "#ffffff",
-      textTransform: "uppercase",
-    },
-    image: {
-      width: windowWidth - 100,
-      height: 180,
-
-    },
-    inputboxcontainer: {
-      flexDirection: "row",
-      padding: 10,
-      width: windowWidth,
-      height: 75
-    },
-    imagineHolder: {
-      width: windowWidth,
-      alignItems: 'center',
-      height: 150,
-    },
-    infobox: {
-      margin: 20,
-
-      backgroundColor: "#6bb9e6",
-      borderColor: "#acc7d6",
-      borderWidth: 3.5,
-      borderRadius: 20,
-      height: 300,
-      marginTop: 45,
-
-    },
-    suninfo: {
-      width: windowWidth,
-
-    }
-  });
 
   useEffect(() => {
     setDateNow(getCurrentDateTime(new Date(Date.now())));
@@ -97,9 +45,15 @@ const NormalView = ({
         <TextInput
           style={styles.textInput}
           onChangeText={(text) => setCityHelper(text)}
-          onSubmitEditing={() => setCity(cityHelper)} />
+          onSubmitEditing={() => {
+            setCity(cityHelper)
+            fetchWeather(cityHelper)
+          }
+          }
+        />
         <FontAwesome
           name="search"
+          onPress={() => fetchWeather(cityHelper)}
           style={{ margin: 8 }}
           color={"white"}
           size={40} />
@@ -116,8 +70,9 @@ const NormalView = ({
 
       <View style={styles.infobox}>
         <Text style={{
+          paddingTop: 15,
           textAlign: 'center',
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: "bold",
           color: "#ffffff",
         }}>{dateNow}</Text>
@@ -125,66 +80,154 @@ const NormalView = ({
         <View style={{
           flex: 1,
           flexDirection: "row",
-
+          paddingTop: 50,
 
         }}>
           <Text style={{
-            padding: (10, 20, 0, 10),
-            fontSize: 40,
+            paddingLeft: 30,
+            fontSize: 65,
             fontWeight: "bold",
             color: "#ffffff",
 
-          }}>{Math.round(temperature)}°C</Text>
+          }}>{Math.round(temperature)} °  </Text>
           <Text style={{
-            padding: (10, 20, 0, 10),
+            paddingTop: 20,
+            fontSize: 30,
+            fontWeight: "bold",
+            color: "#ffffff",
+
+
+          }}>{description}</Text>
+        </View>
+        <View style={{
+          flex: 1,
+          flexDirection: "row",
+          paddingTop: 50,
+
+        }}>
+          <FontAwesome5
+            name="wind"
+            color="white"
+            size={30}
+            style={{ paddingLeft: 25, }}
+          />
+          <Text style={{
+
             fontSize: 25,
             fontWeight: "bold",
             color: "#ffffff",
-          }}>{description}</Text>
+
+          }}> Pressure   |</Text>
+
+          <Text style={{
+
+            fontSize: 25,
+            fontWeight: "bold",
+            color: "#ffffff",
+            paddingLeft: 20
+          }}>{pressure} hPa</Text>
+
         </View>
-
-
       </View>
 
-      {/* <Text>Icon: {icon}</Text>
-      <Text>Kraj: {country}</Text> */}
       <View style={{
         flex: 1,
         flexDirection: "row",
-        alignItems: 'center',
+        alignItems: "flex-end",
 
       }}>
-        <View style={{ paddingLeft: 25, alignItems: 'center', }}>
+        <View style={styles.suninfo}>
           <Image
-            style={{ height: 50, width: 100 }}
+            style={styles.sunriseinfoimagine}
             source={{
-              uri: "http://openweathermap.org/img/wn/01d@2x.png",
+              uri: "https://pngimg.com/uploads/sun/sun_PNG13427.png",
             }}>
           </Image>
-          <Text style={{
-            fontSize: 30,
-            fontWeight: "bold",
-            color: "#ffffff",
-          }}>{getTimeToDisplay(new Date(sunrise * 1000))}</Text>
+          <Text
+            style={styles.suninfoText} >
+            {getTimeToDisplay(new Date(sunrise * 1000))}</Text>
 
         </View>
-        <View style={{ paddingLeft: 95, alignItems: 'center', }}>
+        <View style={{ paddingLeft: 120, alignItems: 'center', }}>
           <Image
-            style={{ height: 50, width: 100 }}
+            style={styles.sunriseinfoimagine}
             source={{
-              uri: "http://openweathermap.org/img/wn/01n@2x.png",
-            }}>
-          </Image>
-          <Text style={{
-            fontSize: 30,
-            fontWeight: "bold",
-            color: "#ffffff",
-          }} >{getTimeToDisplay(new Date(sunset * 1000))}</Text>
-
+              uri: "https://assets.stickpng.com/images/580b585b2edbce24c47b270b.png",
+            }}></Image>
+          <Text
+            style={styles.suninfoText} >
+            {getTimeToDisplay(new Date(sunset * 1000))}
+          </Text>
         </View>
       </View>
-    </View>
+
+    </View >
   );
+
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: "#2d9cdb",
+    flex: 1,
+
+  },
+  textInput: {
+    height: 50,
+    width: 320,
+    margin: 5,
+    borderColor: "#ffffff",
+    borderRadius: 20,
+    borderWidth: 3.5,
+    textAlign: "center",
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ffffff",
+    textTransform: "uppercase",
+  },
+  image: {
+    width: 400,
+    height: 160,
+    aspectRatio: 1.9,
+    paddingBottom: 10,
+
+
+  },
+  inputboxcontainer: {
+    flexDirection: "row",
+    padding: 10,
+
+    height: 75
+  },
+  imagineHolder: {
+
+    alignItems: 'center',
+    height: 150,
+  },
+  infobox: {
+    margin: 20,
+    backgroundColor: "#6bb9e6",
+    borderColor: "#acc7d6",
+    borderWidth: 3.5,
+    borderRadius: 20,
+    height: 300,
+    marginTop: 45,
+  },
+  suninfo: {
+    paddingLeft: 60,
+    alignItems: 'center',
+  },
+  suninfoText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  sunriseinfoimagine: {
+    height: 60,
+    width: 100,
+    aspectRatio: 1.3,
+  }
+})
 
 export default NormalView;

@@ -29,7 +29,7 @@ export default function App() {
 
   const [counter, setCounter] = useState(0)
 
-  function fetchWeather(city) {
+  const fetchWeather = (city) => {
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
     )
@@ -48,20 +48,14 @@ export default function App() {
         setIcon(json.weather[0].icon);
         setIconLink(`http://openweathermap.org/img/wn/${icon}@2x.png`);
 
+        console.log("Używa API")
 
-        // setCounter(counter + 1)
-        // console.log("Api karola używane jest" + counter)
 
       })
       .catch((error) => {
         console.log("error", error);
       });
   }
-
-  useEffect(() => {
-    fetchWeather(city);
-  }, [city]);
-
   let citySetter = (city) => {
     setCity(city);
   };
@@ -78,7 +72,6 @@ export default function App() {
       />
     );
   } else {
-    fetchWeather(city);
     return (
       <NavigationContainer>
         <Tab.Navigator
@@ -115,6 +108,7 @@ export default function App() {
                 sunrise={sunrise}
                 iconLink={iconLink}
                 setCity={citySetter}
+                fetchWeather={fetchWeather}
               />
             )}
           </Tab.Screen>
@@ -146,6 +140,7 @@ export default function App() {
                 sunrise={sunrise}
                 iconLink={iconLink}
                 setCity={citySetter}
+                fetchWeather={fetchWeather}
               />
             )}
           </Tab.Screen>
