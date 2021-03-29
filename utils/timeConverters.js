@@ -16,7 +16,7 @@ export const getCurrentDateTime = (date) => {
   let year = date.getUTCFullYear();
   let time = getTimeToDisplay(date);
 
-  let stringResult = `${dayNumber}(${day}) ${month} ${year}, ${time}`;
+  let stringResult = `${dayNumber} ${month} ${year}, ${time}`;
 
   return stringResult;
 };

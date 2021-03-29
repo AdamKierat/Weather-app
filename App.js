@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+
 import OldView from "./views/OldView";
 import NormalView from "./views/NormalView";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -63,7 +64,7 @@ export default function App() {
   if (apiLoaded == false) {
     return (
       <AppLoading
-        startAsync={fetchWeather(city)}
+        startAsync={fetchWeather("Gliwice")}
         onFinish={() => {
           setapiLoaded(true);
           console.log("Api loaded");
@@ -73,6 +74,7 @@ export default function App() {
     );
   } else {
     return (
+
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
@@ -146,6 +148,7 @@ export default function App() {
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
+
     );
   }
 }

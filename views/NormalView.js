@@ -13,6 +13,7 @@ import {
 import { getTimeToDisplay, getCurrentDateTime } from "../utils/timeConverters";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/Feather";
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const NormalView = ({
   city,
@@ -33,141 +34,147 @@ const NormalView = ({
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputboxcontainer}>
-        <TextInput
-          placeholder={city}
-          style={styles.textInput}
-          onChangeText={(text) => setCityHelper(text)}
-          onSubmitEditing={() => {
-            setCity(cityHelper);
-            fetchWeather(cityHelper);
-          }}
-        />
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+    }}>
+      <View style={styles.container}>
         <TouchableOpacity>
-          <FontAwesome
-            name="search"
-            onPress={() => fetchWeather(cityHelper)}
-            style={{ margin: 8 }}
-            color={"white"}
-            size={40}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.imagineHolder}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: iconLink,
-          }}
-        />
-      </View>
-      <View style={styles.infobox}>
-        <Text
-          style={{
-            paddingTop: 15,
-            textAlign: "center",
-            fontSize: 20,
-            fontWeight: "bold",
-            color: "#ffffff",
-          }}
-        >
-          {dateNow}
-        </Text>
+          <View style={styles.inputboxcontainer}>
+            <TextInput
+              placeholder={city}
+              style={styles.textInput}
+              onChangeText={(text) => setCityHelper(text)}
+              onSubmitEditing={() => {
+                setCity(cityHelper);
+                fetchWeather(cityHelper);
+              }}
+            />
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            paddingTop: 50,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              paddingLeft: 30,
-              fontSize: 65,
-              fontWeight: "bold",
-              color: "#ffffff",
+            <FontAwesome
+              name="search"
+              onPress={() => fetchWeather(cityHelper)}
+              style={{ margin: 8 }}
+              color={"white"}
+              size={40}
+            />
+          </View>
+        </TouchableOpacity>
+        <View style={styles.imagineHolder}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: iconLink,
             }}
-          >
-            {Math.round(temperature)} °{" "}
-          </Text>
-          <Text
-            style={{
-              paddingTop: 20,
-              fontSize: 30,
-              fontWeight: "bold",
-              color: "#ffffff",
-              paddingRight: 20,
-            }}
-          >
-            {description}
-          </Text>
+          />
         </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            paddingTop: 50,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.infobox}>
           <Text
             style={{
+              paddingTop: 15,
+              textAlign: "center",
               fontSize: 25,
               fontWeight: "bold",
               color: "#ffffff",
-              alignContent: "center",
-              justifyContent: "center",
             }}
           >
-            <View
+            {dateNow}
+          </Text>
+
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 50,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
               style={{
-                transform: [{ rotate: "270deg" }],
-                marginLeft: 5,
-                marginTop: 5,
+                paddingLeft: 30,
+                fontSize: 65,
+                fontWeight: "bold",
+                color: "#ffffff",
               }}
             >
-              <Icon name="skip-back" color="#FFFFFF" size={23} />
-            </View>{" "}
-            Pressure{"  "}|
-          </Text>
-          <Text
+              {Math.round(temperature)} °{" "}
+            </Text>
+            <Text
+              style={{
+                paddingTop: 20,
+                fontSize: 30,
+                fontWeight: "bold",
+                color: "#ffffff",
+                paddingRight: 20,
+              }}
+            >
+              {description}
+            </Text>
+          </View>
+          <View
             style={{
-              fontSize: 25,
-              fontWeight: "bold",
-              color: "#ffffff",
-              paddingLeft: 20,
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 50,
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            {pressure} hPa
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: "bold",
+                color: "#ffffff",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  transform: [{ rotate: "270deg" }],
+                  marginLeft: 5,
+                  marginTop: 5,
+                }}
+              >
+                <Icon name="skip-back" color="#FFFFFF" size={23} />
+              </View>{" "}
+            Pressure{"  "}|
           </Text>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: "bold",
+                color: "#ffffff",
+                paddingLeft: 20,
+              }}
+            >
+              {pressure} hPa
+          </Text>
+          </View>
         </View>
-      </View>
 
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          alignItems: "flex-end",
-        }}>
-        <View style={styles.suninfo}>
-          <Icon name="sunrise" color="#FFFFFF" size={49} />
-          <Text style={styles.suninfoText}>
-            {getTimeToDisplay(new Date(sunrise * 1000))}
-          </Text>
-        </View>
-        <View style={{ paddingLeft: 120, alignItems: "center" }}>
-          <Icon name="sunset" color="#FFFFFF" size={49} />
-          <Text style={styles.suninfoText}>
-            {getTimeToDisplay(new Date(sunset * 1000))}
-          </Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-end",
+          }}>
+          <View style={styles.suninfo}>
+            <Icon name="sunrise" color="#FFFFFF" size={49} />
+            <Text style={styles.suninfoText}>
+              {getTimeToDisplay(new Date(sunrise * 1000))}
+            </Text>
+          </View>
+          <View style={{ paddingLeft: 120, alignItems: "center" }}>
+            <Icon name="sunset" color="#FFFFFF" size={49} />
+            <Text style={styles.suninfoText}>
+              {getTimeToDisplay(new Date(sunset * 1000))}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
+
   );
 };
 
@@ -188,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#ffffff",
     textTransform: "uppercase",
-    fontFamily: "Overpass-Light",
+    //fontFamily: "Overpass-Light",
     fontWeight: "bold",
   },
   image: {
