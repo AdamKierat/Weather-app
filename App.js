@@ -37,8 +37,6 @@ export default function App() {
       .then((res) => res.json())
       .then((json) => {
         setIsLoading(false);
-        // setCurrentlon(json.coord.lon);
-        //setCurrentlat(json.coord.lat);
         setCity(json.name);
         setTemperature(json.main.temp);
         setPressure(json.main.pressure);
@@ -48,9 +46,7 @@ export default function App() {
         setSunset(json.sys.sunset);
         setIcon(json.weather[0].icon);
         setIconLink(`http://openweathermap.org/img/wn/${icon}@2x.png`);
-
         console.log("Używa API")
-
 
       })
       .catch((error) => {
@@ -78,9 +74,10 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
-          activeColor="#f0edf6"
-          inactiveColor="#3e2465"
-          barStyle={{ backgroundColor: "grey" }}
+          activeColor="#4040a1"
+
+          inactiveColor="#f0edf6"
+          barStyle={{ backgroundColor: "#618685" }}
         >
           <Tab.Screen
             name="NormalView"
@@ -120,9 +117,9 @@ export default function App() {
               tabBarLabel: "OLD",
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
-                  name="account"
+                  name="biathlon"
                   color={color}
-                  size={26}
+                  size={28}
                 />
               ),
             }}

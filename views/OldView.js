@@ -7,11 +7,11 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  Dimensions,
 } from "react-native";
 import { getTimeToDisplay, getCurrentDateTime } from "../utils/timeConverters";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { Dimensions } from 'react-native';
 import Icon from "react-native-vector-icons/Feather";
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 
@@ -24,6 +24,7 @@ const OldView = ({
   sunrise,
   iconLink,
   setCity,
+  fetchWeather,
 }) => {
   const [cityHelper, setCityHelper] = useState("");
   const [dateNow, setDateNow] = useState();
@@ -35,14 +36,15 @@ const OldView = ({
       paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       backgroundColor: "#2d9cdb",
       flex: 1,
+      minHeight: Math.round(windowHeight) - 55
     },
     textInput: {
       height: 60,
       width: 320,
       margin: 5,
-      borderColor: "rgba(158, 150, 150, 0)",
+      borderColor: "#fff",
       borderRadius: 20,
-      borderWidth: 3.5,
+      borderWidth: 2,
       textAlign: "center",
       fontSize: 40,
       color: "#ffffff",
@@ -108,9 +110,13 @@ const OldView = ({
             placeholder={city}
             style={styles.textInput}
             onChangeText={(text) => setCityHelper(text)}
-            onSubmitEditing={() => setCity(cityHelper)} />
+            onSubmitEditing={() => {
+              setCity(cityHelper);
+              fetchWeather(cityHelper);
+            }} />
           <FontAwesome
             name="search"
+            onPress={() => fetchWeather(cityHelper)}
             style={{ margin: 8 }}
             color={"white"}
             size={40} />
@@ -153,8 +159,8 @@ const OldView = ({
               fontSize: 45,
               fontWeight: "bold",
               color: "#ffffff",
-              paddingLeft: 30,
-              alignItems: "center"
+              flexDirection: "row",
+              textAlign: "center"
             }}>{description}</Text>
           </View>
           <View style={{
