@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+
 import OldView from "./views/OldView";
 import NormalView from "./views/NormalView";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -23,19 +24,19 @@ export default function App() {
   const [sunset, setSunset] = useState();
   const [sunrise, setSunrise] = useState();
   const [icon, setIcon] = useState();
-  const [iconLink, setIconLink] = useState("");
+  const [iconLink, setIconLink] = useState("http://openweathermap.org/img/wn/10d@2x.png");
   const [apiLoaded, setapiLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  function fetchWeather(city) {
+  const [counter, setCounter] = useState(0)
+
+  const fetchWeather = (city) => {
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
     )
       .then((res) => res.json())
       .then((json) => {
         setIsLoading(false);
-        setCurrentlon(json.coord.lon);
-        setCurrentlat(json.coord.lat);
         setCity(json.name);
         setTemperature(json.main.temp);
         setPressure(json.main.pressure);
@@ -45,16 +46,13 @@ export default function App() {
         setSunset(json.sys.sunset);
         setIcon(json.weather[0].icon);
         setIconLink(`http://openweathermap.org/img/wn/${icon}@2x.png`);
+        console.log("Używa API")
+
       })
       .catch((error) => {
         console.log("error", error);
       });
   }
-
-  useEffect(() => {
-    fetchWeather(city);
-  }, [city]);
-
   let citySetter = (city) => {
     setCity(city);
   };
@@ -62,7 +60,7 @@ export default function App() {
   if (apiLoaded == false) {
     return (
       <AppLoading
-        startAsync={fetchWeather(city)}
+        startAsync={fetchWeather("Gliwice")}
         onFinish={() => {
           setapiLoaded(true);
           console.log("Api loaded");
@@ -71,14 +69,15 @@ export default function App() {
       />
     );
   } else {
-    fetchWeather(city);
     return (
+
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
-          activeColor="#f0edf6"
-          inactiveColor="#3e2465"
-          barStyle={{ backgroundColor: "grey" }}
+          activeColor="#4040a1"
+
+          inactiveColor="#f0edf6"
+          barStyle={{ backgroundColor: "#618685" }}
         >
           <Tab.Screen
             name="NormalView"
@@ -108,6 +107,7 @@ export default function App() {
                 sunrise={sunrise}
                 iconLink={iconLink}
                 setCity={citySetter}
+                fetchWeather={fetchWeather}
               />
             )}
           </Tab.Screen>
@@ -117,9 +117,9 @@ export default function App() {
               tabBarLabel: "OLD",
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
-                  name="account"
+                  name="biathlon"
                   color={color}
-                  size={26}
+                  size={28}
                 />
               ),
             }}
@@ -139,11 +139,13 @@ export default function App() {
                 sunrise={sunrise}
                 iconLink={iconLink}
                 setCity={citySetter}
+                fetchWeather={fetchWeather}
               />
             )}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
+
     );
   }
 }
