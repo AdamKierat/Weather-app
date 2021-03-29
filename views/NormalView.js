@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  useWindowDimensions
 } from "react-native";
 
 import { getTimeToDisplay, getCurrentDateTime } from "../utils/timeConverters";
@@ -188,9 +189,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 320,
     margin: 5,
-    borderColor: "rgba(158, 150, 150, 0)",
+    borderColor: "#fff",
     borderRadius: 20,
-    borderWidth: 3.5,
+    borderWidth: 2,
     textAlign: "center",
     fontSize: 30,
     color: "#ffffff",
