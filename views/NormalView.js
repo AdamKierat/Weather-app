@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     //fontFamily: "Overpass-Light",
     fontWeight: "bold",
+    textAlign: "center"
   },
   image: {
     width: 400,

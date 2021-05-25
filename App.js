@@ -36,6 +36,7 @@ export default function App() {
     )
       .then((res) => res.json())
       .then((json) => {
+        console.log(json)
         setIsLoading(false);
         setCity(json.name);
         setTemperature(json.main.temp);

@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   Dimensions,
+  TouchableOpacity
 } from "react-native";
 import { getTimeToDisplay, getCurrentDateTime } from "../utils/timeConverters";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -105,22 +106,24 @@ const OldView = ({
       Keyboard.dismiss();
     }}>
       <View style={styles.container}>
-        <View style={styles.inputboxcontainer}>
-          <TextInput
-            placeholder={city}
-            style={styles.textInput}
-            onChangeText={(text) => setCityHelper(text)}
-            onSubmitEditing={() => {
-              setCity(cityHelper);
-              fetchWeather(cityHelper);
-            }} />
-          <FontAwesome
-            name="search"
-            onPress={() => fetchWeather(cityHelper)}
-            style={{ margin: 8 }}
-            color={"white"}
-            size={40} />
-        </View>
+        <TouchableOpacity>
+          <View style={styles.inputboxcontainer}>
+            <TextInput
+              placeholder={city}
+              style={styles.textInput}
+              onChangeText={(text) => setCityHelper(text)}
+              onSubmitEditing={() => {
+                setCity(cityHelper);
+                fetchWeather(cityHelper);
+              }} />
+            <FontAwesome
+              name="search"
+              onPress={() => fetchWeather(cityHelper)}
+              style={{ margin: 8 }}
+              color={"white"}
+              size={40} />
+          </View>
+        </TouchableOpacity>
         <Text style={{
           paddingTop: 15,
           textAlign: 'center',
